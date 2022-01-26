@@ -1,0 +1,46 @@
+function myMoney() {
+    return getServerMoneyAvailable("home");
+}
+
+disableLog("getServerMoneyAvailable");
+disableLog("sleep");
+
+var cnt = 100;
+print("Deploying fleet up to size " + cnt);
+
+while(hacknet.numNodes() < cnt) 
+{
+    var purchaseCost = hacknet.getPurchaseNodeCost();
+    while(myMoney() < purchaseCost )
+    {
+        print("Need $" + purchaseCost + " . Have $" + myMoney());
+        sleep(3000);
+    }
+    res = hacknet.purchaseNode();
+    print("Purchased hacknet Node with index " + res);
+    while (hacknet.getNodeStats(res).level <= 200) {
+        var cost = hacknet.getLevelUpgradeCost(res, 1);
+        while (myMoney() < cost) {
+            print("Need $" + cost + " . Have $" + myMoney());
+            sleep(3000);
+        }
+        ires = hacknet.upgradeLevel(res, 1);
+    };
+    while (hacknet.getNodeStats(res).ram < 64) {
+        var cost = hacknet.getRamUpgradeCost(res, 1);
+        while (myMoney() < cost) {
+            print("Need $" + cost + " . Have $" + myMoney());
+            sleep(3000);
+        }
+        jres = hacknet.upgradeRam(i, 1);
+    };
+    while (hacknet.getNodeStats(res).cores < 16) {
+        var cost = hacknet.getCoreUpgradeCost(res, 1);
+        while (myMoney() < cost) {
+            print("Need $" + cost + " . Have $" + myMoney());
+            sleep(3000);
+        }
+        kres = hacknet.upgradeCore(res, 1);
+    };
+    print("Node " + cnt + " deployed at max specs ");
+};

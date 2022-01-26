@@ -1,0 +1,7 @@
+while(true) {
+  weaken('n00dles');
+  hack('n00dles');
+  if(getServerMoneyAvailable('n00dles') < (getServerMaxMoney('n00dles') * .25) )
+  {
+    grow('n00dles');
+  }

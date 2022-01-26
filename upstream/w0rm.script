@@ -1,0 +1,75 @@
+var srvs = scan();
+var script_ram = getScriptRam("hax.script");
+print("Script RAM: " + script_ram);
+for(var i=0; i < srvs.length; i++ )
+{
+    var one_hop = scan(srvs[i]);
+    for (var j=0; j < one_hop.length; j++)
+    {
+        if (!srvs.includes(one_hop[j]) && !one_hop[j] == null)
+        {
+            srvs.push(one_hop[j]);
+        }
+    }
+}
+print(srvs);
+for (var s=0; s < srvs.length; s++)
+{
+    srv = srvs[s];
+    scp("w0rm.script", srv)
+    if (!scriptRunning("w0rm.script", srv))
+    {
+        exec("w0rm.script", srv)
+    }
+    scp("hax.script", srv)
+    switch (getServerNumPortsRequired(srv))
+    {
+        case 5: 
+            if(fileExists("SQLInject.exe", "home"))
+            {
+                print("SQL Inject " + srv);
+                sqlinject(srv);
+            }
+            else { break; }
+        case 4:
+            if(fileExists("HTTPWorm.exe","home"))
+            {
+                print("HTTP Worm " + srv);
+                httpworm(srv);
+            }
+            else { break; }
+        case 3:
+            if (fileExists("relaySMTP.exe", "home"))
+            {
+                print("SMTP Crack " + srv);
+                relaysmtp(srv);
+            }
+            else { break; }
+        case 2:
+            if (fileExists("FTPCrack.exe","home"))
+            {
+                print("FTPCracking " + srv);
+                ftpcrack(srv);
+            }
+            else { break; }
+        case 1:
+            if (fileExists("BruteSSH.exe", "home")) 
+            {
+                print("BruteSSHing " + srv);
+                brutessh(srv);
+            }
+            else { break; }
+        case 0:
+            print("Nuking " + srv);
+            nuke(srv);
+            //installBackdoor(srv);
+        default:
+            break;
+    }
+    print("HAXing " + srv);
+    var target_count = ~~((getServerMaxRam(srv) - getServerUsedRam(srv))/ script_ram);
+    if (target_count > 0 && hasRootAccess(srv) && !isRunning("hax.script", srv))
+    {
+        exec("hax.script", srv, target_count);   
+    }
+}

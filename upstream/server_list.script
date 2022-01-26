@@ -1,0 +1,36 @@
+// Attempt to make a server map
+
+server_list = [];
+
+function new_details(server)
+{
+    new_server = new Object();
+    new_server.name = server;
+    new_server.root = hasRootAccess(server);
+    new_server.securityLevel = getServerSecurityLevel(server);
+    new_server.maxMoney = getServerMaxMoney(server);
+    new_server.hackingLevel = getServerRequiredHackingLevel(server);
+    new_server.RAM = getServerMaxRam(server);
+    server_list.push(new_server);
+}
+
+node = getHostname();
+new_details(node);
+res = scan(node);
+for (i=0; i < res.length; i++)
+{
+    new_details(res[i]);
+    deep_res = scan(res[i]);
+    for(j=0; j < deep_res.length; j++)
+    {
+        if (!res.includes(deep_res[j]))
+        {
+            res.push(deep_res[j]);
+        }    
+    }
+}
+
+for (i=0; i < server_list.length; i++)
+{
+    tprint(server_list[i]);
+}
