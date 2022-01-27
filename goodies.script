@@ -1,0 +1,16 @@
+toys = ["BruteSSH.exe",
+        "FTPCrack.exe",
+        "relaySMTP.exe",
+        "HTPWorm.exe",
+        "SQLInject.exe",
+        "DeepscanV2.exe",
+        ];
+
+toys.forEach(element =>
+{
+    if (!fileExists(element,"home"))
+    {
+        exec("buy element", "home");
+    }
+}
+);

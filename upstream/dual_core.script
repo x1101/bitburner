@@ -1,0 +1,69 @@
+// Attempt to make a server map
+
+server_list = [];
+var script_ram = getScriptRam("hax.script");
+
+node = getHostname();
+res = scan(node);
+for (i=0; i < res.length; i++)
+{
+    srv = res[i];
+    switch (getServerNumPortsRequired(srv))
+    {
+        case 5: 
+            if(fileExists("SQLInject.exe", "home"))
+            {
+                print("SQL Inject " + srv);
+                sqlinject(srv);
+            }
+            else { break; }
+        case 4:
+            if(fileExists("HTTPWorm.exe","home"))
+            {
+                print("HTTP Worm " + srv);
+                httpworm(srv);
+            }
+            else { break; }
+        case 3:
+            if (fileExists("relaySMTP.exe", "home"))
+            {
+                print("SMTP Crack " + srv);
+                relaysmtp(srv);
+            }
+            else { break; }
+        case 2:
+            if (fileExists("FTPCrack.exe","home"))
+            {
+                print("FTPCracking " + srv);
+                ftpcrack(srv);
+            }
+            else { break; }
+        case 1:
+            if (fileExists("BruteSSH.exe", "home")) 
+            {
+                print("BruteSSHing " + srv);
+                brutessh(srv);
+            }
+            else { break; }
+        case 0:
+            print("Nuking " + srv);
+            nuke(srv);
+            scp("hax.script", srv)
+            var target_count = ~~((getServerMaxRam(srv) - getServerUsedRam(srv))/ script_ram);
+            if (target_count > 0 && hasRootAccess(srv) && !isRunning("hax.script", srv))
+            {
+                exec("hax.script", srv, target_count);   
+            }
+        default:
+            break;
+    }
+    //try {exec("backdoor", res[i]);} catch (error) { }
+    deep_res = scan(res[i]);
+    for(j=0; j < deep_res.length; j++)
+    {
+        if (!res.includes(deep_res[j]))
+        {
+            res.push(deep_res[j]);
+        }    
+    }
+}

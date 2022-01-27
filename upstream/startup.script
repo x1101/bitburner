@@ -33,10 +33,12 @@ while (!fileExists("BruteSSH.exe")) {
 // Copy our scripts onto each server that requires 1 port
 // to gain root access. Then use brutessh() and nuke()
 // to gain admin access and run the scripts.
-for (var i = 0; i < servers1Port.length; ++i) {
+for (var i = 0; i < servers1Port.length; ++i) 
+{
     var serv = servers1Port[i];
 
     scp("hax.script", serv);
     brutessh(serv);
     nuke(serv);
     exec("hax.script", serv, 12);
+}

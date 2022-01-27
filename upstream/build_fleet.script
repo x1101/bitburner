@@ -18,7 +18,7 @@ while(hacknet.numNodes() < cnt)
     }
     res = hacknet.purchaseNode();
     print("Purchased hacknet Node with index " + res);
-    while (hacknet.getNodeStats(res).level <= 200) {
+    while (hacknet.getNodeStats(res).level < 200) {
         var cost = hacknet.getLevelUpgradeCost(res, 1);
         while (myMoney() < cost) {
             print("Need $" + cost + " . Have $" + myMoney());
