@@ -1,0 +1,73 @@
+var services = ["disableLog", "scan", "exec", "getHacingLevel",
+                "getServerMaxMoney", "hasRootAccess", "getServerMoneyAvailable",
+                "grow","hack",
+                "getServerREquiredHackingLevel", "getServerSecurityLevel", "getServerMinSecurityLevel"
+            ]
+for (s=0; s < services.length; s++) { disableLog(services[s]); }
+
+max=0;
+target="home";
+// Pick a target
+function pickTarget()
+{
+    var srvs = scan();
+    var max = 0;
+    var target = "";
+    res = scan();
+    hax = getHackingLevel();
+    for (i=0; i < res.length; i++)
+    {
+        deep_res = scan(res[i]);
+        for(j=0; j < deep_res.length; j++)
+        {
+            if (!res.includes(deep_res[j]))
+            {
+                res.push(deep_res[j]);
+            }    
+        }
+        var srv = res[i];
+        if (getServerMaxMoney(srv)) //> max && hasRootAccess(srv) && getServerRequiredHackingLevel(srv) <= hax )
+        {
+            max = getServerMaxMoney(srv);
+            target = srv;
+        }
+    }
+    print("Targeting " + target);
+    count = 0;
+}
+
+pickTarget();
+print("Found " + target + " as target with " + max + " avaliable funds");
+// no targets with money?
+if (max >= 1)
+{
+    // Defines how much money a server should have before we hack it
+    // In this case, it is set to 75% of the server's max money
+    var moneyThresh = getServerMaxMoney(target) * 0.75;
+    
+    // Defines the maximum security level the target server can
+    // have. If the target's security level is higher than this,
+    // we'll weaken it before doing anything else
+    var securityThresh = getServerMinSecurityLevel(target) + 5;
+    
+    // Infinite loop that continously hacks/grows/weakens the target server
+    while(count < 10) {
+        if (getServerSecurityLevel(target) > securityThresh) {
+            // If the server's security level is above our threshold, weaken it
+            weaken(target);
+        } else if (getServerMoneyAvailable(target) < moneyThresh) {
+            // If the server's money is less than our threshold, grow it
+            grow(target);
+        } else {
+            // Otherwise, hack it
+            hack(target);
+        }
+        count++;
+    }
+    exec("hax.script");
+}
+else
+{
+    print("No Valid Targets, quitting");
+    exit;
+}

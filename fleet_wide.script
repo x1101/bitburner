@@ -6,8 +6,8 @@ disableLog("getServerMoneyAvailable");
 disableLog("sleep");
 
 
-var batches = 9;
-var per_batch = 10;
+var batches = 20;
+var per_batch = 5;
 
 for (b=1; b <= batches; b++)
 {
@@ -21,7 +21,7 @@ for (b=1; b <= batches; b++)
         while(myMoney() < cost)
         {
             print("Need $" + cost + " . Have $" + myMoney());
-            sleep(3000);
+            sleep(6000);
         }
         res = hacknet.purchaseNode();
         print("Purchased hacknet Node with index " + res);
@@ -38,7 +38,7 @@ for (b=1; b <= batches; b++)
                 while (myMoney() < cost) 
                 {
                     print("Need $" + cost + " . Have $" + myMoney());
-                    sleep(3000);
+                    sleep(6000);
                 }
                 res = hacknet.upgradeLevel(i, 1);
             }
@@ -55,7 +55,7 @@ for (b=1; b <= batches; b++)
             while (myMoney() < cost) 
             {
                 print("Need $" + cost + " . Have $" + myMoney());
-                sleep(3000);
+                sleep(6000);
             }
             res = hacknet.upgradeRam(i, 1);
         }

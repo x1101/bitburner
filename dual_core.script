@@ -1,0 +1,67 @@
+// Turn off chatty logs
+var services = ["disableLog", "getServerNumPortsRequired", "scan", "getServerMaxRam",
+                "getServerUsedRam", "scp", "brutessh", "ftpcrack", "nuke",
+                "relaysmtp", "relaysmtp", "httpworm", "sqlinject", "exec"
+            ];
+for (s=0; s < services.length; s++) { disableLog(services[s]); }
+
+if (args[0] !== undefined) { deploy_script = args[0]; }
+else { deploy_script = "hax.script"; }
+
+function dropper(srv)
+{
+    target_count = ~~((getServerMaxRam(srv) - getServerUsedRam(srv))/ script_ram);
+    if (target_count > 0 && !isRunning(deploy_script, srv))
+    {
+        scp(deploy_script, srv);
+        exec(deploy_script, srv, target_count);   
+    }
+    print("Dropped " + deploy_script + " to " + srv);
+}
+print("Dropping " + deploy_script + " to all available systems");
+
+server_list = [];
+var script_ram = getScriptRam("hax.script");
+
+node = getHostname();
+res = scan(node);
+res.push(node);
+for (i=0; i < res.length; i++)
+{
+    srv = res[i];
+    deep_res = scan(srv);
+    for(j=0; j < deep_res.length; j++)
+    {
+        if (!res.includes(deep_res[j])) { res.push(deep_res[j]); }    
+    }
+    if (hasRootAccess(srv))
+    {
+        print("root on " + srv + " had");
+        dropper(srv);
+        continue;
+    }
+    switch (getServerNumPortsRequired(srv))
+    {
+        case 5: 
+            if(fileExists("SQLInject.exe", "home")) { sqlinject(srv); }
+            else { break; }
+        case 4:
+            if(fileExists("HTTPWorm.exe","home")) { httpworm(srv); }
+            else { break; }
+        case 3:
+            if (fileExists("relaySMTP.exe", "home")) { relaysmtp(srv); }
+            else { break; }
+        case 2:
+            if (fileExists("FTPCrack.exe","home")) { ftpcrack(srv); }
+            else { break; }
+        case 1:
+            if (fileExists("BruteSSH.exe", "home")) { brutessh(srv); }
+            else { break; }
+        case 0:
+            nuke(srv);
+            print("root on " + srv + " get");
+            dropper(srv);
+        default:
+            break;
+    }
+}

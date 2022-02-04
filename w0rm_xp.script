@@ -1,13 +1,27 @@
-// Attempt to make a server map
-
-server_list = [];
+var srvs = scan();
 var script_ram = getScriptRam("hax.script");
-
-node = getHostname();
-res = scan(node);
-for (i=0; i < res.length; i++)
+print("Script RAM: " + script_ram);
+for(var i=0; i < srvs.length; i++ )
 {
-    srv = res[i];
+    var one_hop = scan(srvs[i]);
+    for (var j=0; j < one_hop.length; j++)
+    {
+        if (!srvs.includes(one_hop[j]) && !one_hop[j] == null)
+        {
+            srvs.push(one_hop[j]);
+        }
+    }
+}
+print(srvs);
+for (var s=0; s < srvs.length; s++)
+{
+    srv = srvs[s];
+    scp("w0rm.script", srv)
+    if (!scriptRunning("w0rm.script", srv))
+    {
+        exec("w0rm.script", srv)
+    }
+    scp("hax_xp.script", srv)
     switch (getServerNumPortsRequired(srv))
     {
         case 5: 
@@ -48,22 +62,14 @@ for (i=0; i < res.length; i++)
         case 0:
             print("Nuking " + srv);
             nuke(srv);
-            scp("hax.script", srv)
-            var target_count = ~~((getServerMaxRam(srv) - getServerUsedRam(srv))/ script_ram);
-            if (target_count > 0 && hasRootAccess(srv) && !isRunning("hax.script", srv))
-            {
-                exec("hax.script", srv, target_count);   
-            }
+            //installBackdoor(srv);
         default:
             break;
     }
-    //try {exec("backdoor", res[i]);} catch (error) { }
-    deep_res = scan(res[i]);
-    for(j=0; j < deep_res.length; j++)
+    print("HAXing " + srv);
+    var target_count = ~~((getServerMaxRam(srv) - getServerUsedRam(srv))/ script_ram);
+    if (target_count > 0 && hasRootAccess(srv) && !isRunning("hax.script", srv))
     {
-        if (!res.includes(deep_res[j]))
-        {
-            res.push(deep_res[j]);
-        }    
+        exec("hax_xp.script", srv, target_count);   
     }
 }
