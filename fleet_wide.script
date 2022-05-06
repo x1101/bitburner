@@ -6,7 +6,7 @@ disableLog("getServerMoneyAvailable");
 disableLog("sleep");
 
 
-var batches = 20;
+var batches = 3;
 var per_batch = 5;
 
 for (b=1; b <= batches; b++)

@@ -1,18 +1,15 @@
-var services = ["disableLog", "scan", "exec", "getHacingLevel",
+var services = ["disableLog", "scan", "exec", "getHackingLevel",
                 "getServerMaxMoney", "hasRootAccess", "getServerMoneyAvailable",
                 "grow","hack",
-                "getServerREquiredHackingLevel", "getServerSecurityLevel", "getServerMinSecurityLevel"
+                "getServerRequiredHackingLevel", "getServerSecurityLevel", "getServerMinSecurityLevel"
             ]
 for (s=0; s < services.length; s++) { disableLog(services[s]); }
 
-max=0;
-target="home";
 // Pick a target
 function pickTarget()
 {
-    var srvs = scan();
-    var max = 0;
-    var target = "";
+    target="home";
+    max = 0;
     res = scan();
     hax = getHackingLevel();
     for (i=0; i < res.length; i++)
@@ -26,17 +23,19 @@ function pickTarget()
             }    
         }
         var srv = res[i];
-        if (getServerMaxMoney(srv)) //> max && hasRootAccess(srv) && getServerRequiredHackingLevel(srv) <= hax )
+        if (getServerMaxMoney(srv) > max && hasRootAccess(srv)  && getServerRequiredHackingLevel(srv) <= hax )
         {
             max = getServerMaxMoney(srv);
             target = srv;
+            // debug
+            // print("Found " + target + " as target with " + max + " avaliable funds");
         }
     }
-    print("Targeting " + target);
-    count = 0;
+    // print("Targeting " + target);
+    return target;
 }
 
-pickTarget();
+target = pickTarget();
 print("Found " + target + " as target with " + max + " avaliable funds");
 // no targets with money?
 if (max >= 1)
@@ -51,7 +50,8 @@ if (max >= 1)
     var securityThresh = getServerMinSecurityLevel(target) + 5;
     
     // Infinite loop that continously hacks/grows/weakens the target server
-    while(count < 10) {
+    while( true )
+    {
         if (getServerSecurityLevel(target) > securityThresh) {
             // If the server's security level is above our threshold, weaken it
             weaken(target);
@@ -62,9 +62,7 @@ if (max >= 1)
             // Otherwise, hack it
             hack(target);
         }
-        count++;
     }
-    exec("hax.script");
 }
 else
 {

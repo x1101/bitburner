@@ -1,8 +1,10 @@
-export async function main(ns) {
+export async function main(ns) 
+{
     let output
-    const exeList = ["AutoLink.exe", "BruteSSH.exe", "DeepscanV1.exe", "DeepscanV2.exe", "FTPCrack.exe", "Formulas.exe", "HTTPWorm.exe", "NUKE.exe", "SQLInject.exe", "ServerProfiler.exe", "relaySMTP.exe"]
+    const exeList = ["AutoLink.exe", "BruteSSH.exe", "DeepscanV2.exe", "FTPCrack.exe", "HTTPWorm.exe", "SQLInject.exe", "relaySMTP.exe"]
 
-    exeList.forEach(function (exe) {
+    exeList.forEach(function (exe) 
+    {
         output = "buy " + exe
         if (ns.fileExists(exe) == false) {
             while (ns.fileExists(exe) == false) {

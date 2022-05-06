@@ -1,0 +1,11 @@
+if (args[0] !== undefined) { target = args[0]; }
+else { deploy_script = "n00dles"; }
+
+while(true) {
+  weaken(target);
+  hack(target);
+  if(getServerMoneyAvailable(target) < (getServerMaxMoney(target) * .25) )
+  {
+    grow(target);
+  }
+}

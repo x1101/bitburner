@@ -2,5 +2,7 @@
     "bitburner.authToken": "swHHgDkzYzRKewyhUxQwFGRZnUAShvkAU6mHCPSbQXnuz3TAnEq5NzwEza04AOnN",
     "bitburner.fileWatcher.enable": true,
     "bitburner.showFileWatcherEnabledNotification": true,
-    "bitburner.showPushSuccessNotification": true
+    "bitburner.showPushSuccessNotification": true,
+    "vscode-neovim.logLevel": "none",
+    "vscode-neovim.mouseSelectionStartVisualMode": true
 }

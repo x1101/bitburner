@@ -1,0 +1,22 @@
+function myMoney() 
+{
+    return getServerMoneyAvailable("home");
+}
+
+//disableLog("getServerMoneyAvailable");
+//disableLog("sleep");
+
+var ram = 32;
+var hn = "Srv";
+
+for (i = 0; i < 10 ; ++i) 
+{
+    cost = getPurchasedServerCost(ram);
+    print(cost);
+    while(myMoney() < cost);
+    {
+        print("Need $" + cost + " . Have $" + myMoney());
+        sleep(6000);
+    }
+    res = purchaseServer(hn, ram);
+}

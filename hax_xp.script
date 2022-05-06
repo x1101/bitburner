@@ -1,6 +1,4 @@
 // Script to max out hacking XP, because 'weaken' doesn't raise security, this should be faster
-var script_ram = getScriptRam("hax_xp.script");
-
 node = getHostname();
 res = scan(node)
 for (i=0; i < res.length; i++)
@@ -15,15 +13,13 @@ for (i=0; i < res.length; i++)
     }
 }
 
-for (i=0; i < res.length; i++)
+while (true)
 {
-    if (hasRootAccess(res[i]))
+    for (i=0; i < res.length; i++)
     {
-        weaken(res[i]);
+        if (hasRootAccess(res[i]))
+        {
+            weaken(res[i]);
+        }
     }
-}
-var target_count = ~~((getServerMaxRam() - getServerUsedRam())/ script_ram);
-if (target_count > 0 && hasRootAccess(node) )
-{
-    exec("hax_xp.script", node, target_count);
 }
